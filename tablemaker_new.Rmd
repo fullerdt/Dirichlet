@@ -1,0 +1,204 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+tabl <- function(t, delta, M=20000){
+  
+  t$mme2<-t$mme2[-1,]
+  t$mme2 <- na.omit(t$mme2)
+  
+  b1 <- c()
+  a1 <- c()
+  b2 <- c()
+  a2 <- c()
+  b3 <- c()
+  a3 <- c()
+  
+  for(k in 1:1){
+    b1 <- c(b1, paste0(round2(mean(error(t$mme[,k], delta[k])),4), " (", round2(sd(error(t$mme[,k], delta[k]))/sqrt(M),4),")"))
+    a1 <- c(a1, paste0(round2(mean(aerror(t$mme[,k], delta[k])),4), " (", round2(sd(aerror(t$mme[,k], delta[k]))/sqrt(M),4),")"))
+    b2 <- c(b2, paste0(round2(mean(error(t$mme2[,k], delta[k])),4), " (", round2(sd(error(t$mme2[,k], delta[k]))/sqrt(M),4),")"))
+    a2 <- c(a2, paste0(round2(mean(aerror(t$mme2[,k], delta[k])),4), " (", round2(sd(aerror(t$mme2[,k], delta[k]))/sqrt(M),4),")"))
+    b3 <- c(b3, paste0(round2(mean(error(t$mle[,k], delta[k])),4), " (", round2(sd(error(t$mle[,k], delta[k]))/sqrt(M),4),")"))
+    a3 <- c(a3, paste0(round2(mean(aerror(t$mle[,k], delta[k])),4), " (", round2(sd(aerror(t$mle[,k], delta[k]))/sqrt(M),4),")"))
+  }
+  
+  bias<- data.frame('MME1'=b1, 'MME2'=b2, 'MLE'=b3)
+  aerr<- data.frame(a1, a2, a3) %>% rename('MME1'=a1, 'MME2'=a2, 'MLE'=a3)
+  
+  dats <- rbind(bias, aerr)
+  
+  return(dats)
+}
+
+
+propr <- function(t, d, M=20000){
+  mme <- c()
+  mme2 <- c()
+  mle <- c()
+  for(m in 1:M){
+    mme = c(mme,t$mme[m,1]/sum(t$mme[m,]))
+    mme2 = c(mme2,t$mme2[m,1]/sum(t$mme2[m,]))
+    mle = c(mle,t$mle[m,1]/sum(t$mle[m,]))
+  }
+  
+  return(data.frame(mme,mme2,mle))
+}
+
+
+ptabl <- function(t, d, delta, M=20000){
+  
+  t$mme2<-t$mme2[-1,]
+  t$mme2 <- na.omit(t$mme2)
+  
+  t<-propr(t, d, M)
+  delta <- delta[1]/sum(delta)
+  
+  b1 <- c()
+  a1 <- c()
+  b2 <- c()
+  a2 <- c()
+  b3 <- c()
+  a3 <- c()
+  
+  for(k in 1:1){
+    b1 <- c(b1, paste0(round2(mean(error(t$mme, delta)),4), " (", round2(sd(error(t$mme, delta))/sqrt(M),4),")"))
+    a1 <- c(a1, paste0(round2(mean(aerror(t$mme, delta)),4), " (", round2(sd(aerror(t$mme, delta))/sqrt(M),4),")"))
+    b2 <- c(b2, paste0(round2(mean(error(t$mme2, delta)),4), " (", round2(sd(error(t$mme2, delta))/sqrt(M),4),")"))
+    a2 <- c(a2, paste0(round2(mean(aerror(t$mme2, delta)),4), " (", round2(sd(aerror(t$mme2, delta))/sqrt(M),4),")"))
+    b3 <- c(b3, paste0(round2(mean(error(t$mle, delta)),4), " (", round2(sd(error(t$mle, delta))/sqrt(M),4),")"))
+    a3 <- c(a3, paste0(round2(mean(aerror(t$mle, delta)),4), " (", round2(sd(aerror(t$mle, delta))/sqrt(M),4),")"))
+  }
+  
+  bias<- data.frame('MME1'=b1, 'MME2'=b2, 'MLE'=b3)
+  aerr<- data.frame(a1, a2, a3) %>% rename('MME1'=a1, 'MME2'=a2, 'MLE'=a3)
+  
+  dats <- rbind(bias, aerr)
+  
+  return(dats)
+}
+
+```
+  
+
+
+```{r}
+res <- rawlooperd2_results
+M=K=20000
+
+delta <- rawlooperd2_results$delta
+k=1
+
+t <- res$t10
+    
+  for(k in 1:1){
+    b1 <- c(b1, paste0(round2(mean(error(t$mme[,k], delta[k])),4), " (", round2(sd(error(t$mme[,k], delta[k]))/sqrt(M),4),")"))
+    a1 <- c(a1, paste0(round2(mean(aerror(t$mme[,k], delta[k])),4), " (", round2(sd(aerror(t$mme[,k], delta[k]))/sqrt(M),4),")"))
+    b2 <- c(b2, paste0(round2(mean(error(t$mme2[,k], delta[k])),4), " (", round2(sd(error(t$mme2[,k], delta[k]))/sqrt(M),4),")"))
+    a2 <- c(a2, paste0(round2(mean(aerror(t$mme2[,k], delta[k])),4), " (", round2(sd(aerror(t$mme2[,k], delta[k]))/sqrt(M),4),")"))
+    b3 <- c(b3, paste0(round2(mean(error(t$mle[,k], delta[k])),4), " (", round2(sd(error(t$mle[,k], delta[k]))/sqrt(M),4),")"))
+    a3 <- c(a3, paste0(round2(mean(aerror(t$mle[,k], delta[k])),4), " (", round2(sd(aerror(t$mle[,k], delta[k]))/sqrt(M),4),")"))
+  }
+  
+  bias<- data.frame('MME1'=b1, 'MME2'=b2, 'MLE'=b3)
+  aerr<- data.frame(a1, a2, a3) %>% rename('MME1'=a1, 'MME2'=a2, 'MLE'=a3)
+```
+
+```{r}
+res <- rawlooperd2_results
+delta <- c(0.5, 1, 2, 3, 5)
+res<-res$storagenew
+rest<-res[[1]][[1]]
+
+table <- c()
+for(i in 1:5){
+  row <- c()
+  del <- delta[i]
+  for(j in 1:6){
+    if(j==1) row <- tabl(res[[i]][[j]], del)
+    else row <- row <- rbind(tabl(res[[i]][[j]], del), row)
+  }
+  if(i==1) table <- row
+  else table <- cbind(table, row)
+}
+table
+```
+
+```{r}
+
+res <- rawlooperd2_results
+delta <- res$delta
+res<-res$storagenew
+rest<-res[[1]][[1]]
+
+table <- c()
+for(i in 1:5){
+  row <- c()
+  for(j in 1:6){
+    if(j==1) row <- ptabl(res[[i]][[j]])
+    else row <- row <- rbind(ptabl(res[[i]][[j]]), row)
+  }
+  if(i==1) table <- row
+  else table <- cbind(table, row)
+}
+```
+
+```{r}
+table
+
+write.csv(table,"tabled2.csv")
+```
+
+
+
+
+```{r}
+
+res <- rawlooper50_results
+delta <- c(0.5, 1, 2, 3, 5)
+res<-res$storagenew
+rest<-res[[1]][[1]]
+
+table <- c()
+for(i in 1:5){
+  col <- c()
+  del <- delta[i]
+  for(j in 6:1){
+    if(j==6) col <- ptabl(res[[i]][[j]], delta = rep(del, 2))
+    else col <- col <- cbind(ptabl(res[[i]][[j]], delta = rep(del, 2)), col)
+  }
+  if(i==1) table <- col
+  else table <- rbind(table, col)
+}
+
+table
+
+write.csv(table,"ptabled50.csv")
+```
+
+```{r}
+
+res <- rawlooper50_results
+delta <- c(0.5, 1, 2, 3, 5)
+res<-res$storagenew
+rest<-res[[1]][[1]]
+
+table <- c()
+for(i in 1:5){
+  col <- c()
+  del <- delta[i]
+  for(j in 6:1){
+    if(j==6) col <- tabl(res[[i]][[j]], del)
+    else col <- col <- cbind(tabl(res[[i]][[j]], del), col)
+  }
+  if(i==1) table <- col
+  else table <- rbind(table, col)
+}
+
+table
+
+write.csv(table,"tabled50.csv")
+
+```

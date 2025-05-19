@@ -1,0 +1,738 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(matlib)
+library(SMFilter)
+library(stylo)
+library(philentropy)
+library(latex2exp)
+library(ggplot2)
+library(gridExtra)
+```
+
+```{r}
+res <- rawlooperd2_new_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=2
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    d=2
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+
+
+pd2 <- pd
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+```{r}
+res <- rawlooperd5_new_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=5
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd5 <- pd
+pd <- pd5
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+```{r}
+
+res <- rawlooperd10_new_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=10
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd10 <- pd
+pd <- pd10
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+
+```
+```{r}
+res <- rawlooperd15_new_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=15
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd15 <- pd
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+```{r}
+res <- rawlooperd30_new_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=30
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd30 <- pd
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+
+```{r}
+res <- rawlooperd50_new_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=50
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd50 <- pd
+pd
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+```{r}
+
+pd50$nd = pd50$sample.size/50
+pd50$d = 50
+
+
+pd30$nd = pd30$sample.size/30
+
+
+pd15$nd = pd15$sample.size/15
+pd15$d = 15
+
+
+pd10$nd = pd10$sample.size/10
+pd10$d = 10
+
+
+pd5$nd = pd5$sample.size/5
+pd5$d = 5
+
+pd2$nd = pd2$sample.size/2
+pd2$d = 2
+
+pds <- rbind(pd2, pd5, pd10, pd15, pd50)
+pds$d <- as.factor(pds$d)
+
+pds <- dplyr::filter(pds, sample.size>=25)
+p <- ggplot(pds, aes(x=sample.size, y=logdist, color = delta, shape = d)) +
+  geom_point() +
+  ylab("Log Entropy Distance")+
+  xlab("n") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+  geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+p1 <- p
+```
+
+
+```{r}
+pds$d = pds$sample.size / pds$nd
+pds$d <- as.factor(pds$d)
+
+pds$lognd = log(pds$nd)
+pds$logdist = log(pds$distance)
+
+pds$dn = pds$d / pds$sample.size
+pds$logdn = log(pds$dn)
+
+p <- ggplot(pds, aes(x=logdn, y=logdist, color = delta, shape = d)) +
+  geom_point() +
+  ylab("Log Entropy Distance")+
+  xlab("log(d / n)") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+  geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+
+
+p <- ggplot(pds, aes(x=lognd, y=logdist, color = delta, shape = d)) +
+  geom_point() +
+  ylab("Log Entropy Distance")+
+  xlab("log(n / d)") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+  geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p2 <- p
+p
+```
+
+```{r}
+grid.arrange(p1, p2, ncol=2)
+```
+
+
+
+
+
+```{r}
+res <- rawlooperd10_new_long_results
+delta <- c(.1, .3, .5, .7, .9, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=10
+
+ns=c(25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:10){
+  del = delta[j]
+  for(i in 1:11){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 10), distance)
+pd$delta = as.factor(c(rep(0.1, 11), rep(0.3, 11), rep(0.5, 11), rep(0.7, 11), rep(0.9, 11), rep(1, 11), rep(2, 11), rep(3, 11), rep(5, 11), rep(10, 11)))
+
+pd10. <- pd
+
+p <- ggplot(pd, aes(x=sample.size, y=log(distance), color = delta)) +
+  geom_point() +
+  ylab("Log Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+    geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+
+```
+
+
+```{r}
+res <- rawlooperd10_new_long_.5_results
+delta <- c(.4, .45, .5, .55, .6, .65, .7)
+results<-res$storagenew
+
+d=10
+
+ns=c(25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:7){
+  del = delta[j]
+  for(i in 1:11){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 7), distance)
+pd$delta = as.factor(c(rep(0.4, 11), rep(0.45, 11), rep(0.5, 11), rep(0.55, 11), rep(0.6, 11), rep(0.65, 11), rep(.7, 11)))
+
+pd10.5 <- pd
+
+p <- ggplot(pd, aes(x=sample.size, y=log(distance), color = delta)) +
+  geom_point() +
+  ylab("Log Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+    geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+
+
+```{r}
+res <- rawlooperd9_new_long_results
+delta <- c(.1, .3, .5, .7, .9, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=9
+
+ns=c(25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:10){
+  del = delta[j]
+  for(i in 1:11){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 10), distance)
+pd$delta = as.factor(c(rep(0.1, 11), rep(0.3, 11), rep(0.5, 11), rep(0.7, 11), rep(0.9, 11), rep(1, 11), rep(2, 11), rep(3, 11), rep(5, 11), rep(10, 11)))
+
+pd9. <- pd
+
+p <- ggplot(pd, aes(x=sample.size, y=log(distance), color = delta)) +
+  geom_point() +
+  ylab("Log Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+    geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+
+```
+
+```{r}
+res <- rawlooperd8_new_long_results
+delta <- c(.1, .3, .5, .7, .9, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=8
+
+ns=c(25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:10){
+  del = delta[j]
+  for(i in 1:11){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 10), distance)
+pd$delta = as.factor(c(rep(0.1, 11), rep(0.3, 11), rep(0.5, 11), rep(0.7, 11), rep(0.9, 11), rep(1, 11), rep(2, 11), rep(3, 11), rep(5, 11), rep(10, 11)))
+
+pd8. <- pd
+
+p <- ggplot(pd, aes(x=sample.size, y=log(distance), color = delta)) +
+  geom_point() +
+  ylab("Log Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+    geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+
+```
+
+
+
+```{r}
+res <- rawlooperd8_new_long_results
+delta <- c(.1, .3, .5, .7, .9, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=8
+
+ns=c(25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:10){
+  del = delta[j]
+  for(i in 1:11){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 10), distance)
+pd$delta = as.factor(c(rep(0.1, 11), rep(0.3, 11), rep(0.5, 11), rep(0.7, 11), rep(0.9, 11), rep(1, 11), rep(2, 11), rep(3, 11), rep(5, 11), rep(10, 11)))
+
+pd8. <- pd
+
+p <- ggplot(pd, aes(x=sample.size, y=log(distance), color = delta)) +
+  geom_point() +
+  ylab("Log Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=log(0.05), linetype="dashed", color = "red")+
+    geom_hline(yintercept=log(0.10), linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+
+```
+
+
+```{r}
+res <- rawlooperd5_new_100_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=5
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=100000
+    for(k in 1:100000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/100000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd5 <- pd
+pd <- pd5
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+```{r}
+res <- rawlooperd20_new_long_results
+delta <- c(0.5, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=20
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=40000
+    for(k in 1:40000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/40000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.5, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd5 <- pd
+pd <- pd5
+pd <- dplyr::filter(pd, sample.size>=25)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+
+
+
+```{r}
+res <- rawlooperd5_new_.75_results
+delta <- c(0.75, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=5
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.75, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd5 <- pd
+pd <- pd5
+pd <- dplyr::filter(pd, sample.size>=25, delta == 0.75| delta==1|delta== 5)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+```{r}
+res <- rawlooperd2_new_.75_results
+delta <- c(0.75, 1, 2, 3, 5, 10)
+results<-res$storagenew
+
+d=2
+
+ns=c(5,10,15,20,25,30,35,40,45,50,100,150, 200, 250, 300)
+distance <- c()
+for(j in 1:6){
+  del = delta[j]
+  for(i in 1:15){
+    
+    E <- 0
+    n=20000
+    for(k in 1:20000){
+      E = E + (results[[j]][[i]][[3]][k,] - rep(del, d))%*%t(results[[j]][[i]][[3]][k,] - rep(del, d))
+    }
+    E = E/20000
+    
+    
+    
+    distance <- c(distance, tr(ns[i]*E%*%dirFIMPO(rep(del, d))) - log(det(ns[i]*E%*%dirFIMPO(rep(del, d)))) - d)
+  }
+}
+pd <- data.frame("sample size" =rep(ns, 6), distance)
+pd$delta = as.factor(c(rep(0.75, 15), rep(1, 15), rep(2, 15), rep(3, 15), rep(5, 15), rep(10, 15)))
+
+pd5 <- pd
+pd <- pd5
+pd <- dplyr::filter(pd, sample.size>=25, delta == 0.75| delta==1|delta== 5)
+p <- ggplot(pd, aes(x=sample.size, y=distance, color = delta)) +
+  geom_point() +
+  ylab("Entropy distance")+
+  xlab("Sample size (n)") +
+  geom_hline(yintercept=0.05, linetype="dashed", color = "red")+
+    geom_hline(yintercept=0.10, linetype="dashed", color = "blue")+
+  theme_bw()
+
+p
+```
+
+
+
+
